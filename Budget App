@@ -1,0 +1,157 @@
+class Category:
+    
+    def __init__(self, category):
+        self.ledger = []
+        self.category = category
+    
+    def deposit(self, amount, description = ""):
+        temp ={}
+        temp['amount'] = amount
+        temp['description'] = description
+        self.ledger.append(temp) #adds dict entry to ledger(works)
+    
+    def withdraw(self, amount1, description1 = ""):
+        withdraw = 0
+        if not self.check_funds(amount1):
+            print('can\'t')
+            return False
+        else:
+            withdraw -= amount1
+            self.deposit(withdraw, description1)
+            return True
+        #works
+
+    def get_balance(self):
+        Balance = 0
+        for dictionary in self.ledger:
+            Balance += dictionary['amount']
+        print(Balance)
+        return Balance
+        #works
+
+    def transfer(self, amount2, otherCat):
+        if self.withdraw(amount2, f'Transfer to {otherCat.category}'):
+            otherCat.deposit(amount2, f'Transfer from {self.category}')
+            return True
+        else: return False
+        #works
+        
+
+    def check_funds(self, amount3):
+        if amount3 > self.get_balance():
+            return False
+        else:
+            return True
+        #works
+
+    def get_withdrawals(self):
+        Total = 0
+        
+        for dicts in self.ledger:
+            
+            if dicts['amount'] < 0:
+                Total -= dicts['amount']
+        
+        return Total
+
+
+    def __str__(self):
+        pass
+        headerspace = 30
+        for char in self.category:
+            headerspace -= 1
+        isOdd = bool
+        if headerspace%2 == 1:
+            isOdd = True
+            headerspace -= 1
+        else: 
+            isOdd = False
+        Header = ""
+        for x in range(int(headerspace/2)):
+            Header += "*"
+        Header += str(self.category)
+        for x in range(int(headerspace/2)):
+            Header += "*"
+        if isOdd:
+            Header += "*"
+        Body = ""
+        #Above formats the header
+        for dictionary in self.ledger:
+            Body += "\n"
+            Des = dictionary['description']
+            Amo = dictionary['amount']
+            Body = Body + f'{Des:23.23}{Amo:>7.2f}'
+        #now I want to format all of the dictionary entries
+        Total = "\nTotal: " + f'{self.get_balance():>.2f}'
+        return Header + Body + Total
+
+    #this will be used for returning the string value of the object
+
+#You must do this for withdrawals not the TOTAL!!!
+def create_spend_chart(categories):
+    names = []
+    total = 0
+    for x in categories:
+        names.append(x.category)
+        total += x.get_withdrawals()
+    Percentages = []
+    for x in categories:
+        Percentages.append((x.get_withdrawals()*100/total)//10*10)
+    x = 100
+    print(Percentages)
+    body = "Percentage spent by category\n"
+    while (x >= 0):
+        body += f'{x:3.0f}| '
+        for P in Percentages:
+            if P >= x:
+                body += "o  "
+            else: 
+                body += "   "
+        body += "\n"
+        
+        
+        x -= 10
+    body += '    -'
+    for P in Percentages:
+        body+="---"
+    body += "\n"
+    Letter = 0
+    
+    BiggestCat = names[0]
+    for Name in names:
+        if len(Name) > len(BiggestCat):
+            BiggestCat = Name
+    BiggestL = len(BiggestCat)
+    print(BiggestL)
+    while Letter < BiggestL:
+        body += "     "
+        for Name in names:     
+                         
+            if int(len(Name)) > Letter:
+                body += Name[Letter] + "  "
+                
+                
+            if int(len(Name)) <= Letter: 
+                body += "   "
+        if Letter != BiggestL - 1:
+            body += "\n"
+        
+        Letter += 1
+    
+    return(body)
+    
+
+First = Category("Food")
+Second = Category("Clothes")
+Second.deposit(1000, "first")
+Third = Category('Utility')
+First.deposit(1000, "First")
+Third.deposit(1000,"Second" )
+
+First.withdraw(500, "Third1111111111111111")
+
+Second.transfer(500, Third)
+Third.withdraw(200, "hi")
+
+print(create_spend_chart([First, Second, Third]))
+print("Running")
