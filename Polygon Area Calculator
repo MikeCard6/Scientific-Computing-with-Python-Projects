@@ -1,0 +1,71 @@
+class Rectangle():
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+    
+    def set_width(self, Width):
+        self.width = Width
+
+    def set_height(self, Height):
+        self.height = Height
+
+    def get_area(self):
+        area = self.width*self.height
+        return area
+
+    def get_perimeter(self):
+        peri = (2*self.width)+(2*self.height)
+        return peri
+
+    def get_diagonal(self):
+        return ((self.width ** 2) + (self.height ** 2)) ** .5
+
+    def get_picture(self):
+        if (self.width > 50) or (self.height > 50):
+            return "Too big for picture."
+        body = ""
+        for i in range(self.width):
+            body += "*"
+        body += "\n"
+        Body = ""
+        for i in range(self.height):
+            Body += body
+        return Body
+    
+    def get_amount_inside(self, rect):
+        SmallW = rect.width
+        SmallH = rect.height
+        
+        topR = (self.width / SmallW)%1
+        sideR = (self.height / SmallH)%1
+        top = ((self.width / SmallW) - topR )//1
+        side = ((self.height / SmallH)- sideR)//1
+        return top*side
+
+    def __str__(self):
+        return f'Rectangle(width={self.width}, height={self.height})'
+    
+
+
+class Square(Rectangle):
+    def __init__(self, side):
+        self.width = side
+        self.height = side
+
+    def set_side(self, side):
+        self.width = side
+        self.height = side
+
+    def set_height(self, side):
+        self.width = side
+        self.height = side
+
+    def set_width(self, side):
+        self.width = side
+        self.height = side
+
+    def __str__(self):
+        return f'Square(side={self.width})'
+Rect = Rectangle(5,4)
+Rect.get_picture()
+print("running")
