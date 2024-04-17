@@ -1,0 +1,80 @@
+def arithmetic_arranger(problems, show_answers=False):
+    
+    counter = 0
+    TopRow = ''
+    MiddleRow = ''
+    BottomRow = ''
+    answersRow = ''
+    answerstr = ''
+    
+    for Num_of_Problems in problems:
+        
+        counter += 1 #Counter for Numofproblems
+
+
+        Three = Num_of_Problems.split() #These 4 are
+        FirstDig = Three[0] # the splitting up of 
+        Operand = Three[1] # problem into its pieces
+        SecondDig = Three[2]
+        Firstlen = len(FirstDig)
+        Secondlen = len(SecondDig)
+        if Firstlen > Secondlen:
+            Totallen = Firstlen + 2
+        else:
+            Totallen = Secondlen + 2
+        Firstbreak = Totallen - Firstlen
+        FirstDigaltered = FirstDig
+        for i in range(Firstbreak):
+            FirstDigaltered = ' ' + FirstDigaltered
+        TopRow = TopRow + FirstDigaltered + '    '
+        
+        Secondbreak = Totallen - Secondlen -1
+        SecondDigaltered = SecondDig
+        for i in range(Secondbreak):
+            SecondDigaltered = ' ' + SecondDigaltered
+        MiddleRow = MiddleRow + Operand + SecondDigaltered + '    '
+        
+
+        for i in range(Totallen):
+            BottomRow = BottomRow + '-'
+        BottomRow = BottomRow + '    '
+        
+        
+        #Test for operand
+        if Operand == '/' or Operand == '*':
+            return "Error: Operator must be '+' or '-'."
+       
+        if (len(FirstDig) > 4) or (len(SecondDig) > 4): # Too big of a digit error
+            return 'Error: Numbers cannot be more than four digits.' 
+        
+        if not (FirstDig.isnumeric()) or not (SecondDig.isnumeric()): #Not digits error
+            return 'Error: Numbers must only contain digits.'
+        answers = 0
+        if Operand == '-':
+           answers = int(FirstDig) - int(SecondDig)
+        else: 
+            answers = int(FirstDig) + int(SecondDig)
+        
+        
+        answers = str(answers)
+        Answersbreak = (Totallen) - (len(answers))
+        answerstrcpy = ''
+        for i in range(Answersbreak):
+            answerstrcpy = ' ' + answerstrcpy
+            
+        answerstr = answerstr + answerstrcpy + answers + '    '
+
+
+        if (counter > 5): #Too many problems error
+            return 'Error: Too many problems.'
+    TopRow = TopRow[:-4]
+    MiddleRow = MiddleRow[:-4]
+    BottomRow = BottomRow[:-4]
+    answerstr = answerstr[:-4]
+    
+    if show_answers == False: 
+        return (TopRow + '\n' + MiddleRow + '\n' + BottomRow)
+    else:
+       return (TopRow + '\n' + MiddleRow + '\n' + BottomRow + '\n' + answerstr)
+
+print(arithmetic_arranger(["3801 - 2", "123 + 49"], True))
