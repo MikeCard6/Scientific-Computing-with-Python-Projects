@@ -1,0 +1,120 @@
+def add_time(start, duration, Weekday = ''):
+    Weekdaycopy = Weekday
+    Weekday = ''
+    for char in Weekdaycopy:
+        if char.isupper():
+            Weekday += char.lower()
+        else: 
+            Weekday += char
+    # Above converts the weekday to lowercase
+    
+    if Weekday != '':
+        Weekdaynum = 0
+        if Weekday == "monday":
+            pass
+        elif Weekday == "tuesday":
+            Weekdaynum = 1
+        elif Weekday == "wednesday":
+            Weekdaynum = 2
+        elif Weekday == "thursday":
+            Weekdaynum = 3
+        elif Weekday == "friday":
+            Weekdaynum = 4
+        elif Weekday == "saturday":
+            Weekdaynum = 5
+        elif Weekday == "sunday":
+            Weekdaynum = 6
+        else:
+            pass
+    
+    #holds what day it is in an int
+
+
+    StartHour = int((start.split(':'))[0])
+    StartMin = int(((start.split(':'))[1]).split(' ')[0])
+    StartTOD = ((start.split(':'))[1]).split(' ')[1]
+    AddedHours = int(duration.split(':')[0])
+    AddedMinutes = int(duration.split(':')[1])
+    #Calculate start times, time of day, and added times
+
+    
+    TotalHours = 0
+    TotalMinutes = StartMin + AddedMinutes
+    # Find total minutes
+    
+    if (StartHour == 12 and StartTOD == "AM"):
+        StartHour == 0
+    #Converts 12 midnight to 0 hours
+
+    if (StartTOD == "AM"):
+       pass
+    else: 
+        StartHour = StartHour + 12 
+    #Finds out whether to add 12 hours for pm/am
+
+    Extrahour = 0
+    
+    
+    if (TotalMinutes > 59):
+        Extrahour = 1
+    else:
+        Extrahour = 0
+    #Uses total minutes to find whether to add an extra hour to total time
+    
+    
+    TotalHours = StartHour + Extrahour + AddedHours
+    
+    TotalMinutes = TotalMinutes % 60
+    
+    Days = TotalHours//24
+    EndingHours = TotalHours % 24
+    #Finds total days and the ending hours of the day
+
+    EndTOD = ""
+    if (EndingHours > 13):
+        EndingHours -=12
+        EndTOD = " PM"
+    elif (EndingHours == 12):
+        EndTOD = " PM"
+    else:
+        EndTOD = " AM"
+    #This finds the time of day of the ending hour
+    
+    Enddayslater = ""
+   
+    if Days == 1:
+        Enddayslater = " (next day)"
+    elif Days > 1:
+        Enddayslater = " ("+str(Days)+" days later)"
+    #This does the days later action
+
+    if EndingHours == 0:
+        EndingHours = 12
+    #This prevents the hour being 12
+    EndingHours = str(EndingHours)
+    if TotalMinutes < 10:
+        TotalMinutes = "0" + str(TotalMinutes)
+    TotalMinutes = str(TotalMinutes)
+    # Convert hours and minutes to string for return values
+    if Weekday != '':
+        Weekdaynum += Days
+        Weekdaynum %= 7
+        if Weekdaynum == 0:
+            Weekday = ", Monday"
+        elif Weekdaynum == 1:
+            Weekday = ", Tuesday"
+        elif Weekdaynum == 2:
+            Weekday = ", Wednesday"
+        elif Weekdaynum == 3:
+            Weekday = ", Thursday"
+        elif Weekdaynum == 4:
+            Weekday = ", Friday"
+        elif Weekdaynum == 5:
+            Weekday = ", Saturday"
+        elif Weekdaynum == 6:
+            Weekday = ", Sunday"
+    
+    return (EndingHours+":"+TotalMinutes+EndTOD+Weekday+Enddayslater)
+
+add_time('1:00 AM', '3:00')
+print(add_time('11:59 PM', '24:05'))
