@@ -1,0 +1,63 @@
+import copy
+import random
+
+class Hat:
+
+    def __init__(self, **colors):
+
+        self.contents = [] 
+        for color in colors:
+            for x in range(colors.get(color)):
+                self.contents.append(color)
+        #print(self.contents)
+ #use of ** passes args as a dictionary i can iterate through, goal is to make a list of balls colors with each count equal to the value of the    value pair of the input dict.
+
+    def draw(self, num):
+        totalballs = len(self.contents)
+        ballsdrawn = []
+        copy = []
+        for x in self.contents:
+            copy.append(x)
+        #print(totalballs)
+        #gets total num of balls
+        for i in range(num):
+            r = random.randint(0,totalballs-1)
+            ballsdrawn.append(copy[r])
+            copy.pop(r)
+            #print(ballsdrawn)
+            #print(self.contents)
+            totalballs -= 1
+            if totalballs == 0:
+                return ballsdrawn
+            
+        return ballsdrawn
+        
+
+def experiment(hat, expected_balls, num_balls_drawn, num_experiments):
+    n = 0
+    m = 0
+    prob = 0
+    ballsdrawn = []
+    for i in range(num_experiments):
+        ballsdrawn = hat.draw(num_balls_drawn)
+        h = 1
+        for dictionary in expected_balls:
+            counter = 0
+            for item in ballsdrawn:
+                if item == dictionary:
+                    counter += 1
+            if counter < expected_balls.get(dictionary):
+                h = 0
+        
+        m += 1
+        n += h
+    return (n/m)
+                
+
+
+
+
+H = Hat(yellow=3, blue=2)
+H.draw(2)
+print(experiment(H, {"blue":2}, 3, 1000))
+print("Running")
